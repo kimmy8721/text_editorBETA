@@ -1,5 +1,6 @@
 /*** Libraries. ***/
 
+#include <asm-generic/ioctls.h>
 #include <stddef.h>
 #define _DEFAULT_SOURCE
 #define _BSD_SOURCE
@@ -20,7 +21,7 @@
 
 /*** defines ***/
 
-#define IDEAS_VERSION "0.0.1"
+#define IDEAS_VERSION "0.1.1"
 #define IDEAS_TAB_STOP 4
 #define IDEAS_QUIT_TIMES 3
 #define CTRL_KEY(k) ((k) & 0x1f)
@@ -116,7 +117,6 @@ struct editorSyntax HLDB[] = {
 void editorSetStatusMessage(const char *fmt, ...);
 void editorRefreshScreen();
 char *editorPrompt(char *prompt, void (*callback)(char *, int));
-
 /*** terminal ***/
 
 void die(const char *s) {
@@ -774,6 +774,7 @@ void editorScroll() {
 
 void editorDrawRows(struct abuf *ab) {
   int y;
+  getWindowSize((&E.screenrows), (&E.screencols));
   for (y = 0; y < E.screenrows; y++) {
     int filerow = y + E.rowoff;
     if (filerow >= E.numrows) {
@@ -884,6 +885,7 @@ void editorRefreshScreen() {
   editorDrawRows(&ab);
   editorDrawStatusBar(&ab);
   editorDrawMessageBar(&ab);
+  // TODO: get it to be resizeable
 
   char buf[32];
   snprintf(buf, sizeof(buf), "\x1b[%d;%dH", (E.cy - E.rowoff) + 1,

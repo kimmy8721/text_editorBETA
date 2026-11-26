@@ -415,7 +415,7 @@ void editorSelectSyntaxHighlight() {
   }
 }
 
-/*** row operations ***/
+/*** row ***/ 
 
 int editorRowCxToRx(erow *row, int cx) {
   int rx = 0;
@@ -774,7 +774,6 @@ void editorScroll() {
 
 void editorDrawRows(struct abuf *ab) {
   int y;
-  getWindowSize((&E.screenrows), (&E.screencols));
   for (y = 0; y < E.screenrows; y++) {
     int filerow = y + E.rowoff;
     if (filerow >= E.numrows) {
